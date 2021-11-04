@@ -1,0 +1,109 @@
+/* IMPORTS */
+@import 'https://fonts.googleapis.com/css?family=Open+Sans';
+
+/* GLOBALS */
+:root {
+    --carnelian: #bd1e1eff;
+    --lavender-blush: #ffeaecff;
+    --cadet-blue: #5ab1bbff;
+    --gunmetal: #022f40ff;
+    --deep-saffron: #f19a3eff;
+}
+
+/* GENERAL PAGE ALIGNMENT */
+* {
+    box-sizing: border-box !important;
+    font-size: 1em;
+    font-family: 'Open Sans', sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: 0; padding: 0;
+    /* border: 2px solid violet; */
+}
+body {z-index: 0;} /* Sets as true background layer */
+
+/* WRAPPER ELEMENT LAYOUT */
+wrapper {
+    max-width: 1200px;
+	margin: 0 auto;
+	position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+wrapper > * {position: relative;width: 100%;}
+wrapper header {
+    position: relative;
+    padding: 5px 0;
+    text-align: center;
+}
+wrapper header h1 {
+    font-size: 2.5em;
+}
+wrapper main {
+    flex: 1;
+    padding: 10px;
+}
+/* main {display: flex;} */
+main > * {padding: 2px; margin: 2px;}
+wrapper footer {
+    height: 200px;
+}
+
+/* GRID, FLEX, & CONTAINER ELEMENT LAYOUT */
+grid {display: grid; gap: 2px;}
+grid > * {justify-self: stretch; align-self: stretch;}
+flex {display: flex;}
+container, submenu {display: block;}
+item {display: list-item;}
+spacer {display: inline-block;}
+plaster {display: none;}
+
+/* Submenu CSS */
+nav.submenus {
+    position: absolute;
+    top: 0;
+	left: 0;
+	width: 100%;
+    height: auto;
+    z-index: 1;
+    text-align: center;
+    overflow: visible;
+}
+nav.submenus container {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+nav.submenus container item:hover > submenu {
+	display: block;
+}
+nav.submenus container item a {
+	display: inline-block;
+	padding: 10px 20px;
+	text-decoration: none;
+	position: relative;
+    vertical-align: bottom;
+}
+nav.submenus container submenu {
+	position: absolute;
+	top: 100%;
+    padding-left: 15%;
+	display: none;
+}
+nav.submenus container submenu item {
+	position: relative;
+}
+nav.submenus container submenu submenu {
+	left: 100%;
+	top: 0;
+}
+nav.submenus > container > item {
+	float: left;
+}
+nav.submenus > container > item > a {
+	padding: 10px 20px 15px 20px;
+}
+
+/* Predefined classes */
+.absolute {position: absolute; top: 0; left: 0;}
