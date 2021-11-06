@@ -2,8 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <meta name="theme-color" content="#00d4e8" />
-        <meta name="color-scheme" content="#00d4e8" />
+        <meta name="theme-color" content="#004d8e" />
         <meta name="description" content="Very addictive clicker game based around energy" />
         <link rel="canonical" href="https://sublock69.github.io/" />
         <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0" />
@@ -19,7 +18,22 @@
     </head>
     <body>
         <wrapper>
-
+            <header>
+                <h1>Zapped!</h1>
+                <span class="fineprint">If game menu disappears due to resize refresh the page (bug will be fixed once game drawing works)</span>
+            </header>
+            <main>
+                <container id="game">
+                    <canvas id="view"></canvas>
+                    <nav id="gameNav">
+                        <flex row justify="space-around">
+                            <a href="javascript:void(0);" id="shop">Shop</a>
+                            <a href="javascript:void(0);" id="upgrade">Upgrades</a>
+                            <a href="javascript:void(0);" id="theme">Themes</a>
+                        </flex>
+                    </nav>
+                </container>
+            </main>
         </wrapper>
     </body>
 </html>
