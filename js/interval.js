@@ -1,0 +1,1 @@
+setInterval(() => {postMessage("");}, location.search.slice(4));

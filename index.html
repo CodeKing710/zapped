@@ -11,12 +11,19 @@
         <!--INCLUDES-->
         <link rel="stylesheet" href="./css/main.css" />
         <link rel="stylesheet" href="./css/placss.css" />
+        <!--Libs-->
+        <script src="./js/jcode-2.5.js"></script>
         <script src="./js/dependency_factory.js"></script>
         <script src="./js/placss.js"></script>
-        <script src="./js/jcode-2.5.js"></script>
+
+        <!--Game scripts-->
+        <script src="./js/shop.js"></script>
+        <script src="./js/upgrades.js"></script>
+        <script src="./js/themes.js"></script>
+        <script src="./js/app.js"></script>
         <script src="./js/main.js"></script>
     </head>
-    <body>
+    <body class="mainTheme">
         <wrapper>
             <header>
                 <h1>Zapped!</h1>
@@ -27,9 +34,9 @@
                     <canvas id="view"></canvas>
                     <nav id="gameNav">
                         <flex row justify="space-around">
-                            <a href="javascript:void(0);" id="shop">Shop</a>
-                            <a href="javascript:void(0);" id="upgrade">Upgrades</a>
-                            <a href="javascript:void(0);" id="theme">Themes</a>
+                            <a id="shop">Shop</a>
+                            <a id="upgrade">Upgrades</a>
+                            <a id="theme">Themes</a>
                         </flex>
                     </nav>
                 </container>
