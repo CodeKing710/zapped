@@ -85,7 +85,8 @@ function createList(container) {
     }
 }
 function buy(itemname) {
-    let item = app.data.shop.find(items => items.name === itemname);
+    let shopgrade = [...app.data.shop, ...app.data.upgrades];
+    let item = shopgrade.find(items => items.name === itemname);
     let itemQty = `#${itemname}Qty`, itemCost = `#${itemname}Cost`;
     //Check if player can buy the item
     if(app.stats.totalEnergy >= (item.cost*app.stats.getUnitMod(item.unit))) {
