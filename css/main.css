@@ -55,11 +55,13 @@ body {overflow: auto;}
     padding: 5px;
 }
 .modal section span {font-weight: bold;}
+.modal section h1 {font-size: 2em;}
+.modal section p {font-size: 0.8em;}
 .closeBtn {
     color: var(--color-) !important;
     background-color: var(--bg-color-) !important;
 }
-.closeBtn a {
+.closeBtn > a {
     text-decoration: none;
     display: block;
     width: 100%;
@@ -83,8 +85,10 @@ body {overflow: auto;}
     background: #004d8e;
     color: #00d4e8;
     border-radius: 10px;
+    font-size: 1.2em;
+    font-weight: bolder;
 }
-.buyBtn:hover {color: #004d8e; background: #00d4e8;}
+/* .buyBtn:hover {color: #004d8e; background: #00d4e8;} */
 
 @media screen and (min-width: 300px) and (max-width: 1600px) {
     #game {

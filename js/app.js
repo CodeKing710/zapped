@@ -6,16 +6,19 @@ class Interval {
         this.time = ms;
         this.worker = null;
         this.args = args;
+        this.started = false;
     }
     start() {
-        if(this.worker == null) {
+        if(!this.started) {
             this.worker = new Worker(`./js/interval.js?ms=${this.time}&cb=${this.cb.name}(${this.args.toString()})`);
+            this.started = true;
 
             this.worker.onmessage = function(e) {eval(e.data)};
         }
     }
     stop() {
         this.worker.terminate();
+        this.started = false;
     }
 }
 //Factory for creating drawing objects with hitboxes
@@ -68,25 +71,37 @@ var app = {
     data: {
         shop: [
             {
-                displayName: "Shop Item",
-                name: "item1",
-                desc: "This is where the item will be described and this could be super long or super short it doesn't really matter it just needs to describe whatever the upgrade or item does and how much you can have or maybe that won't be shown we will see I'm just trying to make this a super long description for no reason whatsoever.",
-                cost: 0,
+                displayName: "Auto-Zapper",
+                name: "autozapper",
+                desc: "Auto zaps every second",
+                cost: 7.50,
+                unit: 'y',
                 qty: 0,
-                max: 100,
+                max: 20,
                 epsMul: 1,
                 epcMul: 1,
-                costMul: 1.1,
+                costMul: 1.5,
+                epsAdder: 1,
+                epcAdder: 0,
+                costAdder: 0,
                 done: false
             }
         ],
         upgrades: [
             {
-                displayName: "",
-                name: "",
-                desc: "",
-                cost: 0,
-                multiplier: 1,
+                displayName: "Better Zaps",
+                name: "betterzaps",
+                desc: "Increases baseline zap (click) by 100%",
+                cost: 10,
+                unit: 'z',
+                qty: 0,
+                max: 100,
+                epsMul: 1,
+                epcMul: 1,
+                costMul: 1.1,
+                epsAdder: 0,
+                epcAdder: 1,
+                costAdder: 0,
                 done: false
             }
         ],
@@ -105,10 +120,69 @@ var app = {
     },
     stats: {
         totalEnergy: Number(0), //Total energy player has
-        energyPerSecond: Number(0.1), //Amount of energy made every second
-        energyPerClick: Number(0.5),
+        energyPerSecond: Number(0.1*10**(-24)), //Amount of energy made every second
+        energyPerClick: Number(0.5*10**(-24)),
         earningRate: Number(1000),
-        orderOfMagnitude: Number(1) //Counter for when numbers are too large to display
+        oom: 0,
+        units: function*() {
+            let oomPrefixes = ['y','z','a','f','p','n','&#956;','m','','k','M','G','T','P','E','Z','Y'];
+            let oomMods = [10**(-24),10**(-21),10**(-18),10**(-15),10**(-12),10**(-9),10**(-6),10**(-3),10**1,10**3,10**6,10**9,10**12,10**15,10**18,10**21,10**24];
+            let index = 0, current = oomPrefixes[index];
+            while(index < oomPrefixes.length) {
+                let back = yield {val: current, mod: oomMods[index]};
+                if(back) {
+                    //Move index back as well as
+                    if(index == 0)
+                        index=0
+                    else
+                        --index;
+                    
+                    --app.stats.oom;
+                } else {
+                    ++app.stats.oom;
+                    ++index;
+                }
+                current = oomPrefixes[index];
+            }
+        }, //Iterator for units
+        getUnitMod: function(unit) {
+            switch(unit) {
+                case 'y':
+                    return (10**(-24))
+                case 'z':
+                    return (10**(-21))
+                case 'a':
+                    return (10**(-18))
+                case 'f':
+                    return (10**(-15))
+                case 'p':
+                    return (10**(-12))
+                case 'n':
+                    return (10**(-9))
+                case '&#956;':
+                    return (10**(-6))
+                case 'm':
+                    return (10**(-3))
+                case '':
+                    return (10**(0))
+                case 'k':
+                    return (10**(3))
+                case 'M':
+                    return (10**(6))
+                case 'G':
+                    return (10**(9))
+                case 'T':
+                    return (10**(12))
+                case 'P':
+                    return (10**(15))
+                case 'E':
+                    return (10**(18))
+                case 'Z':
+                    return (10**(21))
+                case 'Y':
+                    return (10**(24))
+            }
+        }
     },
     WIDTH:null,
     HEIGHT:null,
@@ -116,44 +190,42 @@ var app = {
     start: function() {
         //Grab game containers
         let game = $("#game","elem")[0];
-        this.view = $("#view","elem")[0];
-        this.ctx = this.view.getContext('2d');
         
         //Set variables based on screen size
         this.WIDTH = game.offsetWidth-12;
         this.HEIGHT = game.offsetHeight - $("#gameNav","elem")[0].offsetHeight - 16;
         $("#view").attr('width',this.WIDTH).attr('height',this.HEIGHT);
         $(".modal").css('width',`${this.WIDTH-10}px`).css('height',`${this.HEIGHT-10}px`);
-
         //Start the game interval counters
         this.play();
-
-        //Bind game nav buttons
-        $('#shop').on('click',function(){showShop()});
-        $('#upgrade').on('click',function(){showUpgrades()});
-        $('#theme').on('click',function(){showThemes()});
-
-        //Save current theme colors (for reskins later)
-        this.theme = {
-            bg: getComputedStyle(document.body).getPropertyValue('--bg-color-'),
-            color: getComputedStyle(document.body).getPropertyValue('--color-')
-        };
-
-        //Assign click event handler for the only clickable canvas element
-        $("#view").on('click',function(e){app.smallBolt(e)},function(e){app.bigBolt(e,1.01);});
 
         //Fix modal positions
         if(this.init) {
             $('.modal').css('top',`${view.offsetTop+16}px`).css('left',`${view.offsetLeft-4.5}px`);
+
+            this.theme = {
+                bg: getComputedStyle(document.body).getPropertyValue('--bg-color-'),
+                color: getComputedStyle(document.body).getPropertyValue('--color-')
+            };
+
+            //Bind game nav buttons
+            $('#shop').on('click',function(){showShop()});
+            $('#upgrade').on('click',function(){showUpgrades()});
+            $('#theme').on('click',function(){showThemes()});
+            //Assign click event handler for the only clickable canvas element
+            $("#view").on('click',function(e){app.smallBolt(e)},function(e){app.bigBolt(e,1.01);});
+            //Append datasets to respective modals
+            createList("shop");
+            createList("upgrade");
+            createList("theme");
+
+            this.view = $("#view","elem")[0];
+            this.ctx = this.view.getContext('2d');
+
             this.init = false;
         } else {
             $('.modal').css('top',`${view.offsetTop-5}px`).css('left',`${view.offsetLeft-5}px`);
         }
-
-        //Append datasets to respective modals
-        createList("shop");
-        createList("upgrade");
-        createList("theme");
 
         //Fix game if page resizes
         window.onresize = () => {
@@ -221,6 +293,12 @@ var app = {
 //Link up frame interval info to app
 app.frame = new Interval(updateGame, app.fps)
 app.eps = new Interval(changeScore, app.stats.earningRate, app.stats.energyPerSecond)
+app.totalUnit = app.stats.units();
+app.EPSUnit = app.stats.units();
+app.EPCUnit = app.stats.units();
+app.currentTotalUnit = app.totalUnit.next();
+app.currentEPSUnit = app.EPSUnit.next();
+app.currentEPCUnit = app.EPCUnit.next();
 
 //External from app object for event listeners
 function updateGame() {
@@ -240,12 +318,24 @@ function changeScore(num, inc = true) {
 }
 function updateScore() {
     let [te, eps, cer] = ["#totalEnergy", "#earningRate", "#clickRate"];
-    if(app.stats.totalEnergy <= 1000)
-        $(te).text(`Zaps: ${app.stats.totalEnergy.toFixed(1)}`);
-    else
-        $(te).text(`Zaps: ${app.stats.totalEnergy.toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")}`);
-    $(eps).text(`E.Gen/s: ${app.stats.energyPerSecond}`);
-    $(cer).text(`E.Gen/click: ${app.stats.energyPerClick}`);
+    // console.log(app.stats.totalEnergy/app.currentTotalUnit.value.mod)
+
+    if(app.stats.totalEnergy/app.currentTotalUnit.value.mod >= 1000) {
+        app.currentTotalUnit = app.totalUnit.next();
+    }
+    if(app.stats.totalEnergy/app.currentTotalUnit.value.mod < 0) {
+        app.currentTotalUnit = app.totalUnit.next(true);
+    }
+    if(app.stats.energyPerSecond/app.currentEPSUnit.value.mod >= 1000) {
+        app.currentEPSUnit = app.EPSUnit.next();
+    }
+    if(app.stats.energyPerSecond/app.currentEPSUnit.value.mod < 0) {
+        app.currentEPSUnit = app.EPSUnit.next(true);
+    }
+
+    $(te).text(`Zaps: ${(app.stats.totalEnergy/app.currentTotalUnit.value.mod).toFixed(1)} ${app.currentTotalUnit.value.val}J`);
+    $(eps).text(`E/s: ${(app.stats.energyPerSecond/app.currentEPSUnit.value.mod).toFixed(1)} ${app.currentEPSUnit.value.val}J`);
+    $(cer).text(`E/click: ${(app.stats.energyPerClick/app.currentEPCUnit.value.mod*2).toFixed(1)} ${app.currentEPCUnit.value.val}J`);
 
     //update eps dynamically for now
     if(app.eps.args != app.stats.energyPerSecond) {
