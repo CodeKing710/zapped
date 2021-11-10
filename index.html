@@ -17,19 +17,39 @@
         <script src="./js/placss.js"></script>
 
         <!--Game scripts-->
-        <script src="./js/shop.js"></script>
-        <script src="./js/upgrades.js"></script>
-        <script src="./js/themes.js"></script>
+        <script src="./js/modals.js"></script>
         <script src="./js/app.js"></script>
-        <script src="./js/main.js"></script>
+        <script src="./js/main.js" defer></script>
     </head>
     <body class="mainTheme">
         <wrapper>
             <header>
                 <h1>Zapped!</h1>
-                <span class="fineprint">If game menu disappears due to resize refresh the page (bug will be fixed once game drawing works)</span>
+                <!-- <span class="fineprint">If game menu disappears due to resize refresh the page (bug will be fixed once game drawing works)</span> -->
             </header>
             <main>
+                <!-- Modals -->
+                <flex column justify="space-btwn" class="modal" id="shopModal">
+                    <section class="closeBtn">
+                        <a href="javascript:void(0);" onclick="hideShop()">X</a>
+                    </section>
+                </flex>
+                <flex column justify="space-btwn" class="modal" id="upgradeModal">
+                    <section class="closeBtn">
+                        <a href="javascript:void(0);" onclick="hideUpgrades()">X</a>
+                    </section>
+                </flex>
+                <flex column justify="space-btwn" class="modal" id="themeModal">
+                    <section class="closeBtn">
+                        <a href="javascript:void(0);" onclick="hideThemes()">X</a>
+                    </section>
+                </flex>
+                <!-- GAME CONTENTS -->
+                <section id="scoreboard">
+                    <span id="totalEnergy"></span><br>
+                    <span id="earningRate"></span><br>
+                    <span id="clickRate"></span>
+                </section>
                 <container id="game">
                     <canvas id="view"></canvas>
                     <nav id="gameNav">
