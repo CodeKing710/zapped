@@ -204,8 +204,8 @@ var app = {
             $('.modal').css('top',`${view.offsetTop+16}px`).css('left',`${view.offsetLeft-4.5}px`);
 
             this.theme = {
-                bg: getComputedStyle(document.body).getPropertyValue('--bg-color-'),
-                color: getComputedStyle(document.body).getPropertyValue('--color-')
+                bg: this.data.themes[0].bg,
+                color: this.data.themes[0].color
             };
 
             //Bind game nav buttons
@@ -323,13 +323,13 @@ function updateScore() {
     if(app.stats.totalEnergy/app.currentTotalUnit.value.mod >= 1000) {
         app.currentTotalUnit = app.totalUnit.next();
     }
-    if(app.stats.totalEnergy/app.currentTotalUnit.value.mod < 0) {
+    if(app.stats.totalEnergy/app.currentTotalUnit.value.mod < 1) {
         app.currentTotalUnit = app.totalUnit.next(true);
     }
     if(app.stats.energyPerSecond/app.currentEPSUnit.value.mod >= 1000) {
         app.currentEPSUnit = app.EPSUnit.next();
     }
-    if(app.stats.energyPerSecond/app.currentEPSUnit.value.mod < 0) {
+    if(app.stats.energyPerSecond/app.currentEPSUnit.value.mod < 1) {
         app.currentEPSUnit = app.EPSUnit.next(true);
     }
 

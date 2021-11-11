@@ -5,7 +5,7 @@
 }
 * {transition: all 0.3s ease;}
 html {overflow-x: hidden;}
-body {overflow: auto;}
+body {overflow: auto; background: var(--bg-color-); color: var(--color-);}
 #game {
     margin: auto;
     overflow: hidden;
@@ -19,12 +19,12 @@ body {overflow: auto;}
     width: 33.33%;
     text-align: center;
     text-decoration: none;
-    color: var(--color-);
-    background-color: var(--bg-color-);
+    color: inherit;
+    background-color: inherit;
 }
 #game nav a:hover {
-    color: var(--bg-color-);
-    background-color: var(--color-);
+    color: #004d8e;
+    background-color: #00d4e8;
 }
 #view {background-color: gray;}
 .fineprint {font-size: 0.6em; line-height: 2px;}
@@ -58,8 +58,8 @@ body {overflow: auto;}
 .modal section h1 {font-size: 2em;}
 .modal section p {font-size: 0.8em;}
 .closeBtn {
-    color: var(--color-) !important;
-    background-color: var(--bg-color-) !important;
+    color: #00d4e8;
+    background: #004d8e;
 }
 .closeBtn > a {
     text-decoration: none;
@@ -70,13 +70,12 @@ body {overflow: auto;}
     text-align: center;
     font-size: 1.5em;
     font-weight: bolder;
-    color: var(--color-) !important;
+    color: #00d4e8;
 }
 .closeBtn:hover {
-    color: var(--bg-color-) !important;
-    background-color: var(--color-) !important;
+    background: #00d4e8;
 }
-.closeBtn:hover a {color: var(--bg-color-) !important;}
+.closeBtn:hover a {color: #004d8e;}
 .buyBtn {
     text-decoration: none;
     display: inline-block;
@@ -117,3 +116,7 @@ body {overflow: auto;}
 /* THEME CLASSES */
 .mainTheme {background: var(--bg-color-); color: var(--color-)}
 .heatwaveTheme {background: #a73500; color: #fa5500}
+.heatwaveTheme #game nav a:hover {background: #fa5500; color: #000}
+.heatwaveTheme .closeBtn a {color:#fa5500;}
+.heatwaveTheme .closeBtn:hover {background: #5c1d00;}
+.heatwaveTheme .buyBtn {background: #5c1d00; color: #fa5500}

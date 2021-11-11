@@ -61,9 +61,9 @@ function createList(container) {
                     //Handle buy button hover changes here (css wont stay dynamic)
                     setTimeout(() => {
                         $(`#${item.name}Buy`).on('hover',()=>{
-                            $(`#${item.name}Buy`).css('background','#00d4e8').css('color','#004d8e')
+                            $(`#${item.name}Buy`).css('background',app.theme.color).css('color',app.theme.bg)
                         },()=>{
-                            $(`#${item.name}Buy`).css('background','#004d8e').css('color','#00d4e8');
+                            $(`#${item.name}Buy`).css('background',app.theme.bg).css('color',app.theme.color);
                         })
                     }, 10);
                 });
@@ -74,9 +74,27 @@ function createList(container) {
                     //Handle buy button hover changes here (css wont stay dynamic)
                     setTimeout(() => {
                         $(`#${item.name}Buy`).on('hover',()=>{
-                            $(`#${item.name}Buy`).css('background','#00d4e8').css('color','#004d8e')
+                            $(`#${item.name}Buy`).css('background',app.theme.color).css('color',app.theme.bg)
                         },()=>{
-                            $(`#${item.name}Buy`).css('background','#004d8e').css('color','#00d4e8');
+                            $(`#${item.name}Buy`).css('background',app.theme.bg).css('color',app.theme.color);
+                        })
+                    }, 10);
+                });
+            break;
+            case "theme":
+                app.data.themes.forEach(theme => {
+                    let data = `<section>
+                            <h1>${theme.theme}</h1>
+                            <div class="swatch" style="background:${theme.bg}"></div>
+                            <div class="swatch" style="background:${theme.color}"></div>
+                            <a href="javascript:select('${theme.theme}');" class="buyBtn" id="${theme.theme}Select">Select</a>
+                        </section>`;
+                    $("#themeModal","elem")[0].innerHTML += data;
+                    setTimeout(() => {
+                        $(`#${theme.theme}Select`).on('hover',()=>{
+                            $(`#${theme.theme}Select`).css('background',app.theme.color).css('color',app.theme.bg)
+                        },()=>{
+                            $(`#${theme.theme}Select`).css('background',app.theme.bg).css('color',app.theme.color);
                         })
                     }, 10);
                 });
@@ -113,4 +131,11 @@ function buy(itemname) {
         $(`#${item.name}Buy`).text("NOPE").css('background','darkred').css('color','red');
         setTimeout(()=>{$(`#${item.name}Buy`).text("Buy").css('background','#004d8e').css('color','#00d4e8')}, 1000);
     }
+}
+function select(theme) {
+    theme = app.data.themes.find(t => t.theme === theme);
+    document.body.setAttribute('class',theme.theme);
+    app.theme = {bg: theme.bg,color: theme.color};
+    $(`#${theme.theme}Select`).text('Selected');
+    setTimeout(()=>{$(`#${theme.theme}Select`).text('Select')},5000);
 }
