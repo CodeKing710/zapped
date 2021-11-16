@@ -6,6 +6,7 @@
 * {transition: all 0.3s ease;}
 html {overflow-x: hidden;}
 body {overflow: auto; background: var(--bg-color-); color: var(--color-);}
+footer {height: 50px !important;}
 #game {
     margin: auto;
     overflow: hidden;
@@ -54,7 +55,7 @@ body {overflow: auto; background: var(--bg-color-); color: var(--color-);}
     background: #333;
     padding: 5px;
 }
-.modal section span {font-weight: bold;}
+.modal section span {font-weight: bold; display: inline-block}
 .modal section h1 {font-size: 2em;}
 .modal section p {font-size: 0.8em;}
 .closeBtn {
@@ -87,7 +88,25 @@ body {overflow: auto; background: var(--bg-color-); color: var(--color-);}
     font-size: 1.2em;
     font-weight: bolder;
 }
-/* .buyBtn:hover {color: #004d8e; background: #00d4e8;} */
+.buyBtn:hover {color: #004d8e; background: #00d4e8;}
+.link {
+    text-decoration: none;
+    display: inline-block;
+    padding: 5px;
+    background: #004279;
+    color: #00d4e8;
+    border-radius: 5px;
+}
+.link:hover {
+    background: #00d4e8;
+    color: #004d8e;
+}
+#as {
+    padding: 3px;
+    border-radius: 7px;
+    margin: 10px 0;
+    cursor: pointer;
+}
 
 @media screen and (min-width: 300px) and (max-width: 1600px) {
     #game {
@@ -119,4 +138,6 @@ body {overflow: auto; background: var(--bg-color-); color: var(--color-);}
 .heatwaveTheme #game nav a:hover {background: #fa5500; color: #000}
 .heatwaveTheme .closeBtn a {color:#fa5500;}
 .heatwaveTheme .closeBtn:hover {background: #5c1d00;}
-.heatwaveTheme .buyBtn {background: #5c1d00; color: #fa5500}
+.heatwaveTheme .buyBtn {background: #a73500; color: #fa5500}
+.heatwaveTheme .link {background: #5c1d00; color: #fa5500}
+.heatwaveTheme .link:hover {background: #fa5500; color: #5c1d00}

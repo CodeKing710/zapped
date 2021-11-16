@@ -1,5 +1,8 @@
 # zapped.github.io
-Web game where you need to get back the energy taken from you, clicker game, highly addictive
+Baseline design concept for the Zapped! clicker game
+
+How to Play:
+You start by just simply clicking the lightning bolt on the screen to generate energy. Buy shop items and upgrades to increase how much energy you make both per zap (click) and per quantum zaps, zaps made by lingering energy in the universe, gathered consistently. Gain more energy to unlock more upgrades and items and skins. End goal: gain enough energy to create your own big bang! (not yet implemented)
 
 Inspiration: I had this idea for this game for over 4 years, just no easy or discernable way to execute it until now
 

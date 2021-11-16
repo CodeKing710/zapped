@@ -44,6 +44,17 @@
                         <a href="javascript:void(0);" onclick="hideThemes()">X</a>
                     </section>
                 </flex>
+                <flex column justify="space-btwn" class="modal" id="settingsModal">
+                    <section class="closeBtn">
+                        <a href="javascript:void(0);" onclick="hideSettings()">X</a>
+                    </section>
+                    <section>
+                        <h1>Settings</h1>
+                        <span id="as">Autosave</span><br>
+                        <span id="si">Autosave Interval: 3 min</span><br>
+                        <a class="buyBtn" id="save" href="javascript:save()">Save</a>
+                    </section>
+                </flex>
                 <!-- GAME CONTENTS -->
                 <section id="scoreboard">
                     <span id="totalEnergy"></span><br>
@@ -56,11 +67,15 @@
                         <flex row justify="space-around">
                             <a id="shop">Shop</a>
                             <a id="upgrade">Upgrades</a>
-                            <a id="theme">Themes</a>
+                            <a id="theme">Skins</a>
+                            <a id="settings">Settings</a>
                         </flex>
                     </nav>
                 </container>
             </main>
+            <footer align="center">
+                <a href="https://github.com/SubLock69/zapped.github.io/" target="_blank" class="link">Github Repo</a>
+            </footer>
         </wrapper>
     </body>
 </html>
