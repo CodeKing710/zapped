@@ -94,71 +94,14 @@ var app = {
     },
     settings: {
         autosave: true,
-        saveInterval: 3*60*1000
-    },
-    data: {
-        shop: [
-            {displayName: "Auto-Zapper",
-                name: "autozapper",
-                desc: "Auto zaps every second",
-                cost: 7.50,
-                unit: 'y',
-                qty: 0,
-                max: 20,
-                epsMul: 1,
-                epcMul: 1,
-                costMul: 1.5,
-                epsAdder: 1,
-                epcAdder: 0,
-                costAdder: 0,
-                done: false,
-                update: () => {}
-            }
-        ],
-        upgrades: [
-            {displayName: "Better Zaps",
-                name: "betterzaps",
-                desc: "Increases baseline zap (click) by 100%",
-                cost: 10,
-                unit: 'z',
-                qty: 0,
-                max: 100,
-                epsMul: 1,
-                epcMul: 1,
-                costMul: 1.1,
-                epsAdder: 0,
-                epcAdder: 1,
-                costAdder: 0,
-                done: false,
-                update: () => {
-                    let az = app.get('shop','autozapper');
-                    console.log(az);
-                    if(az.qty > 0) {
-                        //Use quantity of autozappers to recalculate
-                        app.stats.energyPerSecond += (app.stats.energyPerClick * az.qty);
-                        //Set new adder for autozapper for future buys
-                        az.epsAdder = (app.stats.energyPerClick*2)/app.currentEPCUnit.value.mod;
-                    }
-                }
-            }
-        ],
-        themes: [
-            {theme: "main",
-                bg: "#004d8e",
-                color: "#00d4e8"
-            },
-            {theme: "heatwave",
-                bg: "#a73500",
-                color: "#fa5500"
-            }
-        ]
+        saveInterval: 3*60*1000,
+        clearSave: () => {localStorage.clear();window.location.reload();}
     },
     stats: {
         totalEnergy: Number(0), //Total energy player has
         energyPerSecond: Number(0.1*10**(-24)), //Amount of energy made every second
         energyPerClick: Number(0.5*10**(-24)),
-        earningRate: Number(1000),
-        oom: 0
+        earningRate: Number(1000)
     },
     units: function*() {
         let oomPrefixes = ['y','z','a','f','p','n','&#956;','m','','k','M','G','T','P','E','Z','Y'];
@@ -173,9 +116,9 @@ var app = {
                 else
                     --index;
                 
-                --app.stats.oom;
+                // --app.stats.oom;
             } else {
-                ++app.stats.oom;
+                // ++app.stats.oom;
                 ++index;
             }
             current = oomPrefixes[index];
@@ -327,6 +270,64 @@ var app = {
         this.bigBolt(e, 0.99);
     }
 };
+//Assign app data
+app.data = {
+    shop: [
+        {displayName: "Auto-Zapper",
+            name: "autozapper",
+            desc: "Auto zaps every second",
+            cost: 1,
+            unit: 'z',
+            qty: 0,
+            max: 20,
+            epsMul: 1,
+            epcMul: 1,
+            costMul: 1.25,
+            epsAdder: 1,
+            epcAdder: 0,
+            costAdder: 0,
+            done: false,
+            update: () => {}
+        }
+    ],
+    upgrades: [
+        {displayName: "Better Zaps",
+            name: "betterzaps",
+            desc: "Increases baseline zap (click) by 100%",
+            cost: 7.5,
+            unit: 'y',
+            qty: 0,
+            max: 100,
+            epsMul: 1,
+            epcMul: 1,
+            costMul: 1.1,
+            epsAdder: 0,
+            epcAdder: 1,
+            costAdder: 0,
+            done: false,
+            update: () => {
+                let az = app.get('shop','autozapper');
+                console.log(az);
+                if(az.qty > 0) {
+                    //Use quantity of autozappers to recalculate
+                    app.stats.energyPerSecond += (app.stats.energyPerClick * az.qty);
+                    //Set new adder for autozapper for future buys
+                    az.epsAdder = (app.stats.energyPerClick*2)/app.currentEPCUnit.value.mod;
+                }
+            }
+        }
+    ],
+    themes: [
+        {theme: "main",
+            bg: "#004d8e",
+            color: "#00d4e8"
+        },
+        {theme: "heatwave",
+            bg: "#a73500",
+            color: "#fa5500"
+        }
+    ]
+}
 //Link up frame interval info to app
 app.frame = new Interval(updateGame, app.fps)
 app.eps = new Interval(changeScore, app.stats.earningRate, app.stats.energyPerSecond)
@@ -406,7 +407,8 @@ function save() {
     });
     localStorage.setItem("theme",app.theme.theme);
     $('#save').text('Saved');
-    setTimeout(() => {$('#save').text('Save')},3000);
+    if(app.settings.saveInterval > 10)
+        setTimeout(() => {$('#save').text('Save')},1000);
 }
 function load() {
     if(localStorage.length > 0) {
@@ -441,8 +443,8 @@ function bindSettings() {
     }).on('click',function(e){
         e.preventDefault();
         app.settings.saveInterval -= 60000;
-        if(app.settings.saveInterval <= app.fps)
-            app.settings.saveInterval = app.fps;
+        if(app.settings.saveInterval <= 0)
+            app.settings.saveInterval = 10;
         
         $("#si").text(`Autosave Interval: ${(app.settings.saveInterval/60000).toFixed(0)} min`);
     });
